@@ -4,9 +4,9 @@
 */
 
 /*
-  Ford-Fulkerson's algorithm for Max Flow
-  Edmund-Karp implementation of Ford-Fulkerson
+  Bipartite matching with Max Flow.
 */
+
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -16,9 +16,8 @@
 
 using namespace std;
 
-
 const int INF = 987654321;
-const int MAX_V = 1000;
+const int MAX_V = 2002;
 
 // capacity[i][j] = capacity from i to j 
 // flow[i][j] = current flow from i to j
@@ -63,11 +62,54 @@ int NF(int source, int sink)
     }
   }
 
-  return 0;
+  return totalFlow;
+}
+
+
+int T,N;
+int s[MAX_V];
+int d[MAX_V];
+int t[MAX_V][MAX_V];
+
+void print_t()
+{
+  for (int i=0;i<N;i++){
+      for (int j=0;j<(N);j++) {
+        cout << t[i][j] << " ";
+      }
+      cout << endl;
+  }
 }
 
 int main(int argc, char *argv[])
 {
-  
+
+  cin >> T;
+  for (int test=1; test <= 1; test++) {
+    
+    cin >> N; V=2*N+2; 
+    for (int i=0;i<N;i++) cin >> s[i];
+    for (int i=0;i<N;i++) cin >> d[i];
+    for (int i=0;i<N;i++) for (int j=i;j<(N);j++) { cin >> t[i][j]; t[j][i] = t[i][j];}
+
+    memset(capacity, 0, sizeof(capacity));
+    memset(flow, 0, sizeof(flow));
+    
+    for (int i=0;i<N;i++)
+      for (int j=0;j<(N);j++) {
+        if ( s[i] + d[i] + t[i][j] <= s[j] ) {
+          capacity[i][N+j] = 1;
+          //printf("from %d to %d, %d,%d,%d => %d\n",i,j,s[i],d[i],t[i][j],s[j]);
+        }
+      }
+    // source to A/ B to sink
+    for (int i=0;i<N;i++){
+      capacity[2*N][i] = 1;
+      capacity[N+i][2*N+1] = 1;     
+    }
+    // # of pairwise independent game
+    printf("%d\n",N-NF(2*N, 2*N+1));
+    // list
+  }
   return 0;
 }
